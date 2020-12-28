@@ -1,1 +1,2 @@
 # Solitaire
+Projet d'étude
