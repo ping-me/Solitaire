@@ -15,13 +15,10 @@ const Solitaire = (() => {
     // Les div pour les 7 colonnes
     let piles = [];
 
-    let stylesheet = null;
-
     // Gestion du drag n drop
     let curCardMoveListener = null;
     let curCardEndDrag = null;
     let curHoveredCard = null;
-    let cardHoverListener = null;
 
     /**
      * Détection de collision entre 2 divs.
@@ -87,7 +84,7 @@ const Solitaire = (() => {
                 // On obtient le dernier enfant
                 let pileCard = getDeepestChild(curHoveredPile);
                 if (pileCard) {
-                    if (overlaps(event.target, pileCard) && (pileCard != event.target)) {
+                    if (overlaps(event.target, pileCard) && (pileCard !== event.target)) {
                         pileOpenCard = pileCard;
                     }
                 }
@@ -120,7 +117,7 @@ const Solitaire = (() => {
             // On essaie de poser sur une colonne vide
             if (curHoveredCard.id.includes('pile')) {
                 // Est-ce que c'est un roi ?
-                if (event.target.dataset.rank == '12') {
+                if (event.target.dataset.rank === '12') {
                     canDrop = true;
                 }
             }
@@ -129,29 +126,29 @@ const Solitaire = (() => {
                 if (curHoveredCard.children.length) {
                     let foundationOpenCard = getDeepestChild(curHoveredCard);
                     // On vérifie la couleur de la famille actuelle
-                    if (foundationOpenCard.dataset.suit == event.target.dataset.suit) {
+                    if (foundationOpenCard.dataset.suit === event.target.dataset.suit) {
                         // On vérifie la continuité
-                        if (parseInt(foundationOpenCard.dataset.rank) + 1 == parseInt(event.target.dataset.rank)) {
+                        if (parseInt(foundationOpenCard.dataset.rank) + 1 === parseInt(event.target.dataset.rank)) {
                             canDrop = true;
                         }
                     }
                 }
                 else {
                     // Famille vide : essaie t-on de poser un as ?
-                    if (event.target.dataset.rank == '0') {
+                    if (event.target.dataset.rank === '0') {
                         canDrop = true;
                     }
                 }
             }
             // Sinon on essaie de poser sur la carte ouverte d'une colonne
             else {
-                if (parseInt(curHoveredCard.dataset.rank) == (parseInt(event.target.dataset.rank) + 1)) {
-                    if ((curHoveredCard.dataset.suit == '0') || (curHoveredCard.dataset.suit == '3')) {
-                        if ((event.target.dataset.suit == '1') || (event.target.dataset.suit == '2')) {
+                if (parseInt(curHoveredCard.dataset.rank) === (parseInt(event.target.dataset.rank) + 1)) {
+                    if ((curHoveredCard.dataset.suit === '0') || (curHoveredCard.dataset.suit === '3')) {
+                        if ((event.target.dataset.suit === '1') || (event.target.dataset.suit === '2')) {
                             canDrop = true;
                         }
                     } else {
-                        if ((event.target.dataset.suit == '0') || (event.target.dataset.suit == '3')) {
+                        if ((event.target.dataset.suit === '0') || (event.target.dataset.suit === '3')) {
                             canDrop = true;
                         }
                     }
@@ -167,19 +164,19 @@ const Solitaire = (() => {
      * @param event L'événement en cours
      */
     function startCardMove(event) {
-        let blockToMove = event.target;
-        let originX = blockToMove.offsetLeft;
-        let originY = blockToMove.offsetTop;
+        let cardToMove = event.target;
+        let originX = cardToMove.offsetLeft;
+        let originY = cardToMove.offsetTop;
         let mouseOriginX = event.clientX;
         let mouseOriginY = event.clientY;
         curCardMoveListener = (event) => cardMove(event, originX, originY, mouseOriginX, mouseOriginY);
         curCardEndDrag = (event) => endCardMove(event, originX, originY, mouseOriginX, mouseOriginY);
-        blockToMove.addEventListener('mousemove', curCardMoveListener);
-        blockToMove.addEventListener('mouseout', curCardEndDrag);
-        blockToMove.addEventListener('mouseup', curCardEndDrag);
-        blockToMove.style.cursor = 'grabbing';
-        blockToMove.style.boxShadow = '15px 15px 10px -5px #000';
-        blockToMove.style.zIndex = '1';
+        cardToMove.addEventListener('mousemove', curCardMoveListener);
+        cardToMove.addEventListener('mouseout', curCardEndDrag);
+        cardToMove.addEventListener('mouseup', curCardEndDrag);
+        cardToMove.style.cursor = 'grabbing';
+        cardToMove.style.boxShadow = '15px 15px 10px -5px #000';
+        cardToMove.style.zIndex = '1';
     }
 
     /**
@@ -194,9 +191,9 @@ const Solitaire = (() => {
      * @param mouseOriginY La position Y originale de la souris
      */
     function cardMove(event, originX, originY, mouseOriginX, mouseOriginY) {
-        let blockToMove = event.target;
-        blockToMove.style.left = originX + event.clientX - mouseOriginX + 'px';
-        blockToMove.style.top = originY + event.clientY - mouseOriginY + 'px';
+        let cardToMove = event.target;
+        cardToMove.style.left = originX + event.clientX - mouseOriginX + 'px';
+        cardToMove.style.top = originY + event.clientY - mouseOriginY + 'px';
         // On vérifie si on passe au dessus d'une carte ouverte des colonnes
         curHoveredCard = getPileOpenCard(event);
         if (curHoveredCard) {
@@ -219,21 +216,21 @@ const Solitaire = (() => {
      * @param mouseOriginY La position Y originale de la souris
      */
     function endCardMove(event, originX, originY, mouseOriginX, mouseOriginY) {
-        let blockToMove = event.target;
+        let cardToMove = event.target;
         removeCardsBorder();
-        blockToMove.removeEventListener('mousemove', curCardMoveListener);
-        blockToMove.removeEventListener('mouseout', curCardEndDrag);
-        blockToMove.removeEventListener('mouseup', curCardEndDrag);
+        cardToMove.removeEventListener('mousemove', curCardMoveListener);
+        cardToMove.removeEventListener('mouseout', curCardEndDrag);
+        cardToMove.removeEventListener('mouseup', curCardEndDrag);
 
         // Vérifie si la carte peut être déposée à cet endroit
-        blockToMove.style.left = originX + event.clientX - mouseOriginX + 'px';
-        blockToMove.style.top = originY + event.clientY - mouseOriginY + 'px';
-        blockToMove.style.transform = 'translate(' + -(event.clientX - mouseOriginX) + 'px, ' + -(event.clientY - mouseOriginY) + 'px)';
-        blockToMove.style.transition ='transform 250ms ease-out';
-        blockToMove.style.cursor = 'grab';
+        cardToMove.style.left = originX + event.clientX - mouseOriginX + 'px';
+        cardToMove.style.top = originY + event.clientY - mouseOriginY + 'px';
+        cardToMove.style.transform = 'translate(' + -(event.clientX - mouseOriginX) + 'px, ' + -(event.clientY - mouseOriginY) + 'px)';
+        cardToMove.style.transition ='transform 250ms ease-out';
+        cardToMove.style.cursor = 'grab';
         if (canDropCard(event)) {
             // On place la carte dans la bonne pile
-            curHoveredCard.appendChild(blockToMove);
+            curHoveredCard.appendChild(cardToMove);
             // On retourne toute les cartes enfants
             for (let pile = 0; pile < 7; pile++) {
                 let deepestChild = getDeepestChild(piles[pile]);
@@ -241,11 +238,11 @@ const Solitaire = (() => {
                     showCard(deepestChild);
                 }
             }
-            blockToMove.style.zIndex = '';
-            blockToMove.style.boxShadow = '';
+            cardToMove.style.zIndex = '';
+            cardToMove.style.boxShadow = '';
             if (curHoveredCard.id.includes('foundation')) {
                 // Est-ce que toutes les familles sont complétées ?
-                if (foundations[0].children.length + foundations[1].children.length + foundations[2].children.length + foundations[3].children.length == 52) {
+                if (foundations[0].children.length + foundations[1].children.length + foundations[2].children.length + foundations[3].children.length === 52) {
                     alert('Gagné !');
                     // On vide tout
                     for (let foundation = 0; foundation < 4; foundation++) {
@@ -258,31 +255,35 @@ const Solitaire = (() => {
             else {
                 if (!curHoveredCard.id.includes('pile')) {
                     // On appelle cette fonction car il faut mettre à jour la position et enlever les effets d'animation
-                    window.setTimeout(() => updatePosition(blockToMove, curHoveredCard.offsetLeft, curHoveredCard.offsetTop), 250);
-                    window.setTimeout(() => removeEffects(blockToMove), 250);
+                    window.setTimeout(() => updatePosition(cardToMove, curHoveredCard.offsetLeft, curHoveredCard.offsetTop), 250);
+                    window.setTimeout(() => removeEffects(cardToMove), 250);
                 }
             }
         }
         else {
             // On replace la carte à sa place d'origine
-            window.setTimeout(() => updatePosition(blockToMove, originX, originY), 250);
+            window.setTimeout(() => updatePosition(cardToMove, originX, originY), 250);
         }
     }
 
     /**
      * Permet de mettre à jour la position de l'élément après une animation
-     * @param block Le bloc dont la position est à mettre à jour
+     * @param card La carte dont la position est à mettre à jour
      * @param x La position x finale
      * @param y La position y finale
      */
-    function updatePosition(block, x, y) {
-        block.style.left = x + 'px';
-        block.style.top = y + 'px';
+    function updatePosition(card, x, y) {
+        card.style.left = x + 'px';
+        card.style.top = y + 'px';
     }
 
-    function removeEffects(block) {
-        block.style.removeProperty('transition');
-        block.style.removeProperty('transform');
+    /**
+     * Supprime les effets spéciaux sur l'élément
+     * @param card La carte dont les effets doivent être retirés
+     */
+    function removeEffects(card) {
+        card.style.removeProperty('transition');
+        card.style.removeProperty('transform');
     }
 
     /**
@@ -382,13 +383,13 @@ const Solitaire = (() => {
 
         // Distribution des cartes
         for (let pile = 0; pile < 7; pile++) {
-            let currentPile = document.getElementById('pile' + pile);
-            let currentParent = currentPile;
+            let currentParent = document.getElementById('pile' + pile);
             for (let cardCount = 0; cardCount <= pile; cardCount++) {
                 let cardToMove = hiddenStock.lastChild;
                 currentParent.appendChild(cardToMove);
                 currentParent = cardToMove;
             }
+            // On retourne la dernière carte de la pile
             showCard(currentParent);
         }
 
