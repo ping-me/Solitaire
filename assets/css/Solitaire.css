@@ -1,12 +1,17 @@
 #game-board {
     position: relative;
-    border: solid 3px #0c4128;
+    box-shadow: 0px 0px 5px 3px #000;
     border-radius: 5px;
     background-color: #0f5132;
 }
 
 .game-card {
     position: absolute;
-    top: 0px;
     left: 0px;
+    border: 0px;
+    border-radius: 5px;
+}
+
+.game-card:hover {
+    cursor: grab;
 }
