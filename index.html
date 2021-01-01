@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/Solitaire.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <title>Javascript Solitaire</title>
@@ -11,7 +11,12 @@
 <body>
     <div class="container-fluid" id="main-container">
         <div class="row" id="title">
-            <div class="col-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3 text-center"><h1>Solitaire</h1></div>
+            <div class="col-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3 text-center mb-5">
+                <h1>Solitaire</h1>
+            </div>
+        </div>
+        <div class="row flex-grow-1">
+            <div class="col-10 offset-1" id="game-board"></div>
         </div>
     </div>
     <script src="assets/js/Solitaire.js"></script>

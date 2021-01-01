@@ -1,0 +1,12 @@
+#game-board {
+    position: relative;
+    border: solid 3px #0c4128;
+    border-radius: 5px;
+    background-color: #0f5132;
+}
+
+.game-card {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
