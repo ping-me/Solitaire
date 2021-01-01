@@ -209,6 +209,7 @@ const Solitaire = (() => {
      * Appelé à la fin d'un drag n drop.
      * Nettoie la carte déplacée de tous les listeners inutiles,
      * effectue le placement final avec la gestion des animations CSS
+     * @todo Nettoyer correctement les listener qui semblent s'inscrirent plusieurs fois...
      * @param event L'événement en cours
      * @param originX La position X originale de la carte à déplacer
      * @param originY La position Y originale de la carte à déplacer
