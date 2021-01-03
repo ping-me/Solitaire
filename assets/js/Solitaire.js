@@ -264,6 +264,7 @@ const Solitaire = (() => {
         else {
             // On replace la carte à sa place d'origine
             window.setTimeout(() => updatePosition(cardToMove, originX, originY), 250);
+            window.setTimeout(() => removeEffects(cardToMove), 250);
         }
     }
 
