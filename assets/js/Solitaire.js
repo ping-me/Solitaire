@@ -403,6 +403,7 @@ const Solitaire = (() => {
      * Adapte le plateau de jeu à la fenêtre
      */
     function resizeBoard() {
+
         // Hauteur maximale d'une pile : 4 cartes
         gameBoard.style.height = (cardHeight * 5.5) + 'px';
         gameBoard.style.marginBottom = (cardHeight * 0.5) + 'px';
